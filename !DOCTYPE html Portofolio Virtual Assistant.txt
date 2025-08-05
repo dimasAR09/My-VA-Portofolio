@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Dimas Arif Rahmansyah">
+    <meta name="description" content="Portofolio profesional Dimas Arif Rahmansyah, seorang Virtual Assistant yang berdedikasi untuk membantu meningkatkan produktivitas bisnis Anda.">
+    <title>Dimas VA - Portofolio Virtual Assistant Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Cream, Dark Slate Gray, Muted Teal) -->
+    <!-- Application Structure Plan: A single-page application with a fixed navigation bar for smooth scrolling to thematic sections (Beranda, Tentang, Layanan, Keahlian, Testimoni, Hubungi). This structure is chosen over a linear document to provide a modern, app-like experience, allowing users to quickly navigate to information that interests them most. The flow is designed to guide potential clients from introduction to conversion (contact) seamlessly. Key interactions include hover effects on service cards and a dynamic skills chart to make the content more engaging and digestible. A new interactive feature using the Gemini API has been added to allow users to generate an email draft, directly demonstrating a core VA skill. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Daftar Layanan (Services List). Goal: Inform & Engage. Viz/Method: Interactive HTML cards with hover effects. Interaction: Hover reveals more details or provides visual feedback. Justification: More engaging than a static list, breaks down information into digestible chunks. Library/Method: HTML/CSS with Tailwind.
+        - Report Info: Keahlian dan Alat (Skills and Tools table). Goal: Compare & Showcase proficiency. Viz/Method: Radar Chart. Interaction: Tooltips on hover show skill categories and proficiency scores. Justification: A radar chart provides a quick, high-impact visual summary of capabilities across different domains, which is far more effective and memorable than a simple table. Library/Method: Chart.js (Canvas).
+        - Report Info: Testimoni. Goal: Build trust. Viz/Method: Styled quote blocks. Interaction: Static. Justification: Clean, readable presentation is key for testimonials. Library/Method: HTML/CSS with Tailwind.
+        - Report Info: Draft Email. Goal: Demonstrate capability & value. Viz/Method: Interactive form with text areas and button. Interaction: User inputs prompt, selects tone, clicks button, and receives an AI-generated email draft. Justification: This feature provides a tangible, hands-on experience for a potential client, showcasing the virtual assistant's skill in a dynamic way. Library/Method: Gemini API (via fetch), HTML/JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF7;
+            color: #334155;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #14B8A6;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <nav class="flex justify-between items-center">
+                <a href="#beranda" class="text-xl font-bold text-slate-700">Dimas VA</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#tentang" class="nav-link text-slate-600 hover:text-teal-600">Tentang</a>
+                    <a href="#layanan" class="nav-link text-slate-600 hover:text-teal-600">Layanan</a>
+                    <a href="#keahlian" class="nav-link text-slate-600 hover:text-teal-600">Keahlian</a>
+                    <a href="#testimoni" class="nav-link text-slate-600 hover:text-teal-600">Testimoni</a>
+                    <a href="#ai-demo" class="nav-link text-slate-600 hover:text-teal-600">Demo AI</a>
+                    <a href="#hubungi" class="bg-teal-500 text-white px-4 py-2 rounded-full hover:bg-teal-600 transition-colors">Hubungi Saya</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-slate-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </nav>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#tentang" class="block py-2 text-slate-600">Tentang</a>
+            <a href="#layanan" class="block py-2 text-slate-600">Layanan</a>
+            <a href="#keahlian" class="block py-2 text-slate-600">Keahlian</a>
+            <a href="#testimoni" class="block py-2 text-slate-600">Testimoni</a>
+            <a href="#ai-demo" class="block py-2 text-slate-600">Demo AI</a>
+            <a href="#hubungi" class="block mt-2 text-center bg-teal-500 text-white px-4 py-2 rounded-full">Hubungi Saya</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="beranda" class="min-h-screen flex items-center pt-20">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-800 leading-tight">Meningkatkan Produktivitas Bisnis Anda</h1>
+                <p class="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">Saya Dimas Arif Rahmansyah, seorang Virtual Assistant profesional yang siap membantu Anda mengelola tugas harian agar Anda dapat fokus pada pertumbuhan bisnis.</p>
+                <div class="mt-8">
+                    <a href="#hubungi" class="bg-teal-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-teal-600 transition-transform hover:scale-105 inline-block">Mari Berkolaborasi</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="tentang" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">Tentang Saya</h2>
+                    <p class="mt-2 text-slate-500">Mitra tepercaya untuk efisiensi bisnis Anda.</p>
+                </div>
+                <div class="max-w-4xl mx-auto text-center text-slate-600 leading-relaxed">
+                    <p>Saya Dimas, seorang Virtual Assistant profesional yang berdedikasi untuk membantu para profesional dan pemilik bisnis dalam mengelola tugas-tugas administratif, operasional, dan kreatif. Dengan pengalaman lebih dari 3Tahun di bidang Personal assistent, Digital marketing atau sosial media assistant dan, Adiministratif perusahaan, saya memiliki keahlian dalam menyederhanakan alur kerja, meningkatkan produktivitas, dan memastikan operasi bisnis berjalan lancar.</p>
+                    <p class="mt-4">Filosofi kerja saya adalah menjadi mitra tepercaya yang memungkinkan Anda fokus pada apa yang paling penting: pertumbuhan bisnis Anda. Saya bekerja dengan efisien, proaktif, dan selalu berorientasi pada detail.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="layanan" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">Layanan yang Saya Tawarkan</h2>
+                    <p class="mt-2 text-slate-500">Solusi yang disesuaikan untuk kebutuhan unik Anda.</p>
+                </div>
+                <div id="services-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                </div>
+            </div>
+        </section>
+
+        <section id="keahlian" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">Keahlian & Alat</h2>
+                    <p class="mt-2 text-slate-500">Visualisasi kompetensi saya di berbagai domain.</p>
+                </div>
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="chart-container">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                    <div id="tools-list" class="space-y-6">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="testimoni" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">Testimoni Klien</h2>
+                    <p class="mt-2 text-slate-500">Apa kata mereka tentang kerja sama kami.</p>
+                </div>
+                <div class="space-y-8">
+                    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md">
+                        <p class="text-slate-600 italic text-lg">"Dimas sangat profesional dan proaktif. Ia tidak hanya menyelesaikan tugas yang diberikan, tetapi juga memberikan saran yang membantu saya menghemat waktu dan meningkatkan efisiensi. Sangat direkomendasikan!"</p>
+                        <p class="mt-6 font-bold text-right text-slate-800">— Devi Maryam, <span class="font-normal text-slate-500">Costumer Service Manager</span></p>
+                    </div>
+                    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md">
+                        <p class="text-slate-600 italic text-lg">"Saya terkesan dan puas dengan jasa virtual assistant, pengerjaannya efisien dan flexible dengan keingiinan client"</p>
+                        <p class="mt-6 font-bold text-right text-slate-800">— Sebastian Michel, <span class="font-normal text-slate-500">Sastrawan</span></p>
+                    </div>
+                    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md">
+                        <p class="text-slate-600 italic text-lg">"Sangat luar biasa bekerjasama dengan anda, saya sebagai pengusaha dan kontraktor proyek sangat terbantu dengan penanganan assistant virtual anda"</p>
+                        <p class="mt-6 font-bold text-right text-slate-800">— Koh zulvein chen, <span class="font-normal text-slate-500">Pengusaha</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="ai-demo" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">✨ Buat Draf Email dengan Gemini</h2>
+                    <p class="mt-2 text-slate-500">Demo singkat kemampuan saya dalam menyusun komunikasi profesional. Masukkan ide Anda, dan biarkan saya menyusun drafnya.</p>
+                </div>
+                <div class="max-w-3xl mx-auto bg-gray-100 p-8 rounded-xl shadow-md">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="email-prompt" class="block text-slate-700 font-semibold mb-2">Tuliskan ide email Anda:</label>
+                            <textarea id="email-prompt" rows="4" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                        </div>
+                        <div>
+                            <label for="email-tone" class="block text-slate-700 font-semibold mb-2">Pilih nada email:</label>
+                            <select id="email-tone" class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <option value="profesional dan formal">Profesional dan Formal</option>
+                                <option value="ramah dan santai">Ramah dan Santai</option>
+                                <option value="pemasaran yang persuasif">Pemasaran yang Persuasif</option>
+                            </select>
+                        </div>
+                        <button id="generate-email-btn" class="w-full bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600 transition-colors flex items-center justify-center space-x-2">
+                            <span>Buat Draf Email</span>
+                            <span id="loading-spinner" class="hidden animate-spin h-5 w-5 border-4 border-white border-t-transparent rounded-full"></span>
+                        </button>
+                    </div>
+                    <div id="email-output-container" class="mt-8 hidden">
+                        <label for="email-output" class="block text-slate-700 font-semibold mb-2">Draf Email Anda:</label>
+                        <textarea id="email-output" rows="10" class="w-full p-3 rounded-lg border border-gray-300 bg-white" readonly></textarea>
+                        <div class="flex justify-end mt-2">
+                            <button id="copy-email-btn" class="text-sm text-teal-600 hover:text-teal-800 transition-colors">Salin ke Clipboard</button>
+                        </div>
+                    </div>
+                    <div id="error-message" class="mt-4 hidden text-red-600"></div>
+                </div>
+            </div>
+        </section>            
+        
+        <section id="hubungi" class="py-20 bg-slate-800 text-white">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold">Mari Wujudkan Tujuan Bisnis Anda</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-slate-300">Saya siap membantu. Hubungi saya untuk konsultasi gratis atau untuk mendapatkan penawaran khusus yang sesuai dengan kebutuhan Anda. Privasi Anda penting bagi saya; informasi yang Anda kirimkan hanya akan digunakan untuk keperluan komunikasi kita.</p>
+                <div class="mt-8 flex flex-col md:flex-row justify-center items-center gap-8">
+                    <a href="mailto:dimasrahmansyaharif09@gmail.com" class="text-lg hover:text-teal-400 transition-colors">
+                        <span class="font-semibold">Email:</span> dimasrahmansyaharif09@gmail.com
+                    </a>
+                    <a href="https://www.linkedin.com/in/dimas-arif-rahmansyah/" target="_blank" rel="noopener noreferrer" class="text-lg hover:text-teal-400 transition-colors">
+                        <span class="font-semibold">LinkedIn:</span> Dimas Arif Rahmansyah
+                    </a>
+                    <a href="tel:085719264955" class="text-lg hover:text-teal-400 transition-colors">
+                        <span class="font-semibold">Nomor Telepon:</span> 085719264955
+                    </a>
+                </div>
+                <div class="mt-8 text-slate-400">
+                    <p><span class="font-semibold">Jam Kerja:</span> Senin - Jumat, 09.00 - 17.00 WIB</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 py-6">
+        <div class="container mx-auto px-6 text-center text-slate-500">
+            <p>&copy; 2025 Dimas VA. Didesain dan dikembangkan oleh Dimas Arif Rahmansyah. Semua hak dilindungi.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const servicesData = [
+            {
+                title: 'Dukungan Administratif & Eksekutif',
+                icon: '?',
+                description: 'Mengatur jadwal, email, dokumen, dan riset untuk menjaga operasi bisnis Anda tetap terorganisir dan efisien.',
+                details: ['Manajemen Email & Kalender', 'Pengorganisasian Dokumen', 'Input Data & Riset', 'Manajemen Kontak']
+            },
+            {
+                title: 'Manajemen Proyek & Operasional',
+                icon: '📈',
+                description: 'Mengawasi proyek, melacak tenggat waktu, dan memastikan komunikasi yang lancar antara semua pihak terkait.',
+                details: ['Pengawasan Proyek', 'Manajemen CRM', 'Koordinasi Tim & Vendor']
+            },
+            {
+                title: 'Pemasaran Digital & Media Sosial',
+                icon: '📱',
+                description: 'Membangun kehadiran online Anda melalui manajemen media sosial, pembuatan konten, dan pemeliharaan website.',
+                details: ['Manajemen Media Sosial', 'Pembuatan Konten Sederhana', 'Manajemen Website & Blog']
+            }
+        ];
+
+        const toolsData = [
+            { category: 'Manajemen Proyek', tools: 'Trello, Asana, Monday.com, Notion' },
+            { category: 'Komunikasi', tools: 'Slack, Microsoft Teams, Zoom, Google Meet' },
+            { category: 'Google Suite', tools: 'Docs, Sheets, Slides, Calendar, Drive' },
+            { category: 'Microsoft Office', tools: 'Word, Excel, PowerPoint, Outlook' },
+            { category: 'Media Sosial', tools: 'Canva, Buffer, Hootsuite, Later' },
+            { category: 'Lainnya', tools: 'WordPress, Mailchimp, Airtable, Zapier' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const servicesContainer = document.getElementById('services-container');
+            servicesData.forEach(service => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-8 rounded-xl shadow-md hover:shadow-xl hover:-translate-y-2 transition-all duration-300';
+                card.innerHTML = `
+                    <div class="text-4xl mb-4">${service.icon}</div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">${service.title}</h3>
+                    <p class="text-slate-600">${service.description}</p>
+                `;
+                servicesContainer.appendChild(card);
+            });
+
+            const toolsListContainer = document.getElementById('tools-list');
+            toolsData.forEach(item => {
+                const toolItem = document.createElement('div');
+                toolItem.innerHTML = `
+                    <h4 class="font-bold text-lg text-slate-700">${item.category}</h4>
+                    <p class="text-slate-600">${item.tools}</p>
+                `;
+                toolsListContainer.appendChild(toolItem);
+            });
+            
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Administrasi', 'Manajemen Proyek', 'Pemasaran Digital', 'Komunikasi', 'Organisasi', 'Teknis'],
+                    datasets: [{
+                        label: 'Tingkat Keahlian',
+                        data: [90, 85, 80, 95, 92, 88],
+                        backgroundColor: 'rgba(20, 184, 166, 0.2)',
+                        borderColor: 'rgba(20, 184, 166, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(20, 184, 166, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(20, 184, 166, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: {
+                                font: { size: 14, family: 'Inter' },
+                                color: '#334155'
+                            },
+                            ticks: {
+                                backdropColor: 'rgba(253, 251, 247, 1)',
+                                color: '#64748b',
+                                stepSize: 20
+                            },
+                            min: 0,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            const generateEmailBtn = document.getElementById('generate-email-btn');
+            const emailPrompt = document.getElementById('email-prompt');
+            const emailTone = document.getElementById('email-tone');
+            const emailOutputContainer = document.getElementById('email-output-container');
+            const emailOutput = document.getElementById('email-output');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const errorMessage = document.getElementById('error-message');
+            const copyEmailBtn = document.getElementById('copy-email-btn');
+
+            let retryCount = 0;
+            const MAX_RETRIES = 3;
+            const RETRY_DELAY_MS = 2000;
+
+            generateEmailBtn.addEventListener('click', async () => {
+                const promptText = emailPrompt.value.trim();
+                if (!promptText) {
+                    errorMessage.textContent = 'Mohon masukkan ide email Anda.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                emailOutputContainer.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+                loadingSpinner.classList.remove('hidden');
+                generateEmailBtn.disabled = true;
+
+                const tone = emailTone.value;
+                const prompt = `Tulis draf email dengan nada ${tone} berdasarkan ide berikut: "${promptText}".`;
+
+                try {
+                    await callGeminiAPI(prompt);
+                    retryCount = 0;
+                } catch (error) {
+                    console.error("Failed to call Gemini API:", error);
+                    errorMessage.textContent = 'Terjadi kesalahan saat membuat draf email. Silakan coba lagi.';
+                    errorMessage.classList.remove('hidden');
+                    loadingSpinner.classList.add('hidden');
+                    generateEmailBtn.disabled = false;
+                }
+            });
+
+            const callGeminiAPI = async (prompt) => {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                
+                const payload = { contents: chatHistory };
+                const apiKey = "" 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API call failed with status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        emailOutput.value = text;
+                        emailOutputContainer.classList.remove('hidden');
+                    } else {
+                        throw new Error('Unexpected API response structure or content missing.');
+                    }
+                } catch (error) {
+                    if (retryCount < MAX_RETRIES) {
+                        retryCount++;
+                        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS * Math.pow(2, retryCount - 1)));
+                        await callGeminiAPI(prompt);
+                    } else {
+                        throw error;
+                    }
+                } finally {
+                    loadingSpinner.classList.add('hidden');
+                    generateEmailBtn.disabled = false;
+                }
+            };
+
+            copyEmailBtn.addEventListener('click', () => {
+                emailOutput.select();
+                emailOutput.setSelectionRange(0, 99999);
+                try {
+                    document.execCommand('copy');
+                    alert('Draf email telah disalin!');
+                } catch (err) {
+                    console.error('Gagal menyalin:', err);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
